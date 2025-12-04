@@ -72,6 +72,7 @@ def fetch_neo_data(api_key, start_date, end_date):
     params = {
         'start_date': start_date,
         'end_date': end_date,
+        'detailed': 'true',
         'api_key': api_key
     }
     
