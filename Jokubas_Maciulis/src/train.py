@@ -2,9 +2,12 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils import class_weight
 import tensorflow as tf
 
 df = pd.read_csv("data/processed/electron_dataset.csv")
+
+# print(df['target'].value_counts())
 
 X = df.drop(columns = ["target"]).to_numpy()
 
@@ -18,25 +21,39 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(X.shape[1],)),
+    tf.keras.layers.Dense(64),
+    tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Dropout(0.2),
     tf.keras.layers.Dense(32),
     tf.keras.layers.LeakyReLU(),
+    tf.keras.layers.Dropout(0.2),
     tf.keras.layers.Dense(16),
     tf.keras.layers.LeakyReLU(),
-    tf.keras.layers.Dense(1, activation="sigmoid")  
+    tf.keras.layers.Dense(1, activation="sigmoid")
 ])
 
 model.summary()
 
 model.compile(
-    optimizer="adam",
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
     loss="binary_crossentropy",
-    metrics=["accuracy"]
+    metrics=["accuracy", tf.keras.metrics.AUC(name="auc")]
 )
+
+class_weights = class_weight.compute_class_weight(
+    class_weight='balanced',
+    classes=np.unique(y_train),
+    y=y_train
+)
+
+class_weights_dict = dict(enumerate(class_weights))
 
 history = model.fit(
     X_train,
     y_train,
-    epochs=20,
-    batch_size=256,
-    validation_split=0.2
+    epochs=30,
+    batch_size=128,
+    validation_split=0.2,
+    verbose = 2,
+    class_weight=class_weights_dict
 )
