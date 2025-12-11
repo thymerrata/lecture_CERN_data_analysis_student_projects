@@ -1,6 +1,6 @@
 # CMS Electron Classification Project
 
-This project trains a neural network to classify CMS experiment events as **signal** or **background** using electron and jet features.
+This project trains a neural network to classify CMS experiment events as **signal** or **background** using electron and jet features. The **signal** is defined as electron–positron pairs originating from the Drell–Yan process in proton–proton collisions. Any other events that contain a real electron pair—or events where detector imperfections cause other particles to be misidentified as electrons—are treated as **background noise**.
 
 ---
 
@@ -25,7 +25,7 @@ project_root/
 ├─ results/ # Trained models and plots
 │ ├─ electron_classifier.h5
 │ ├─ training_plot.png
-│ └─ auc_plot.png
+│ ├─ auc_plot.png
 │ └─ roc_plot.png
 │
 ├─ environment.yml # Conda environment
@@ -81,4 +81,4 @@ python -m scripts.3_evaluate
 
 ## References / Data
 - Data used for training from the CMS experiment (NanoAODSIM format for 2016 collision data).
-- Relevant Pythong libraries: ```pandas```, ```numpy```, ```awkward```, ```uproot```, ```tensorflow```, ```scikit-learn```, ```matplotlib```
+- Relevant Python libraries: ```pandas```, ```numpy```, ```awkward```, ```uproot```, ```tensorflow```, ```scikit-learn```, ```matplotlib```
